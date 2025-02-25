@@ -4,50 +4,50 @@ import tensorflow as tf
 from transformers import BertTokenizer, TFBertForSequenceClassification
 from sklearn.preprocessing import LabelEncoder
 
-# Step 1: Load and Preprocess the Data
-data = pd.read_pickle('/content/merged_training.pkl')  # Replace with your dataset path
-data = data.head(10000)  # Limit to the first 10,000 entries
 
-# Define the basic emotion labels
+data = pd.read_pickle('/content/merged_training.pkl')  
+data = data.head(10000)  
+
+
 basic_labels = ['Sadness', 'Anger', 'Love', 'Surprise', 'Fear', 'Joy']
 
-# Encode the emotion labels
-label_encoder = LabelEncoder()
-data['emotion_encoded'] = label_encoder.fit_transform(data['emotions'])  # Map emotions to integers
 
-# Split the data
+label_encoder = LabelEncoder()
+data['emotion_encoded'] = label_encoder.fit_transform(data['emotions'])  
+
+
 X = data['text']
 y = data['emotion_encoded']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Step 2: Load the BERT Tokenizer and Model
+
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 model = TFBertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=len(basic_labels))
 
-# Tokenize the text data
+
 train_encodings = tokenizer(list(X_train), truncation=True, padding=True, return_tensors='tf')
 test_encodings = tokenizer(list(X_test), truncation=True, padding=True, return_tensors='tf')
 
-# Convert labels to TensorFlow tensors
+
 train_labels = tf.convert_to_tensor(y_train, dtype=tf.int32)
 test_labels = tf.convert_to_tensor(y_test, dtype=tf.int32)
 
-# Step 3: Compile the Model
+
 model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=5e-5),
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
 
-# Step 4: Train the Model
+
 model.fit(train_encodings['input_ids'], train_labels,
           validation_data=(test_encodings['input_ids'], test_labels),
           epochs=5,
           batch_size=8)
 
-# Step 5: Evaluate the Model
+
 loss, accuracy = model.evaluate(test_encodings['input_ids'], test_labels)
 print(f"Test Loss: {loss}, Test Accuracy: {accuracy}")
 
-# Step 6: Derived Emotion Categories
+
 def map_to_derived_category(emotion):
     """Maps basic emotions to derived or combined categories."""
     derived_mapping = {
@@ -67,7 +67,7 @@ def map_to_derived_category(emotion):
     }
     return derived_mapping.get(emotion, 'Neutral')
 
-# Step 7: Yoga Recommendations
+
 def get_yoga_recommendations(derived_category):
     """Provides yoga recommendations based on derived emotional categories."""
     yoga_mapping = {
@@ -99,7 +99,7 @@ def get_yoga_recommendations(derived_category):
     }
     return yoga_mapping.get(derived_category, ["No specific recommendation available."])
 
-# Step 8: Chatbot Functionality
+
 def chat_with_user():
     print("Welcome to your personalized Yoga Journey! 🌸")
     print("I'm here to guide you towards peace and balance. Let's find some yoga poses to help you feel your best.")
