@@ -1,7 +1,7 @@
-## Emotion Yoga Chatbot
+## MindPose
 
 ### Overview
-This project is a chatbot that classifies emotions using BERT and provides personalized yoga recommendations based on detected emotions. It utilizes deep learning and NLP techniques to analyze user input and suggest yoga poses to promote mental well-being.
+MindPose is a chatbot that classifies emotions using BERT and provides personalized yoga recommendations based on detected emotions. It utilizes deep learning and NLP techniques to analyze user input and suggest yoga poses to promote mental well-being.
 
 ### Features
 - Emotion detection using a fine-tuned BERT model.
