@@ -32,15 +32,6 @@ python chatbot.py
 ```
 Follow the prompts to describe your emotions and receive tailored yoga pose recommendations.
 
-### Dependencies
-Add the following packages to `requirements.txt`:
-```
-pandas
-scikit-learn
-tensorflow
-transformers
-```
-
 ### Contributing
 Feel free to submit issues and pull requests to improve the chatbot!
 
